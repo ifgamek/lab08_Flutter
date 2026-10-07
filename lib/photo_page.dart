@@ -14,6 +14,12 @@ class PhotoPage extends StatefulWidget {
 }
 
 class _PhotoPageState extends State<PhotoPage> {
+  final List<String> _localPhotos = 
+  [
+    'assets/images/1.png',
+    'assets/images/2.png',
+    'assets/images/3.png',
+  ];
   String? _imageUrl;
   bool _isLoading = false;
   String? _errorMessage;
@@ -26,24 +32,15 @@ class _PhotoPageState extends State<PhotoPage> {
       _imageUrl = null;
     });
     try {
-      String url;
-      http.Response response;
 
-      if (_animalType == PhotoType.dog) {
-        url = 'https://dog.ceo/api/breeds/image/random';
-        response = await http.get(Uri.parse(url));
-        Map<String, dynamic> data = jsonDecode(
-          response.body,
-        );
-        _imageUrl = data['message'];
-      } else {
-        final random =
-            DateTime.now().millisecondsSinceEpoch;
-        _imageUrl =
-            'https://picsum.photos/seed/$random/800/800';
-      }
+      await Future.delayed(const Duration(seconds: 2));
+
+      final randomIndex = DateTime.now().millisecondsSinceEpoch %
+      _localPhotos.length;
+      _imageUrl = _localPhotos[randomIndex];
+      
     } catch (e) {
-      _errorMessage = 'не удалось загрузить фото. \nПроверьте подключения к интерену.';
+      _errorMessage = 'ошибка загрузки фото.';
     }
     setState(() {
       _isLoading = false;
@@ -105,6 +102,85 @@ class _PhotoPageState extends State<PhotoPage> {
           },
         ),
       ],
+    );
+  }
+
+  Widget _buildContent() {
+    if (_isLoading) {
+      return const Expanded(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Expanded(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              _errorMessage!,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    if (_imageUrl != null) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(
+              16,
+            ),
+            child: Image.asset(
+              _imageUrl!,
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return const Expanded(
+      child: Center(
+        child: Text(
+          'нажмите кнопку \nчтобы загрузить фото',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.grey,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton() {
+    String label = _animalType == PhotoType.dog
+        ? 'новая собака'
+        : 'новый пейзаж';
+    return ElevatedButton(
+      onPressed: _isLoading ? null : _fetchPhoto,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 12,
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(fontSize: 16),
+        ),
+      ),
     );
   }
 }

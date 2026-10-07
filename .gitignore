@@ -46,10 +46,3 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
-
-android/
-ios/
-linux/
-macos/
-windows/
-test/

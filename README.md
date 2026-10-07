@@ -1,17 +1,47 @@
-# photo_of_the_day
+###### Асинхронность в Dart и Flutter
 
-A new Flutter project.
+#### Ульянов Владислав ИСП-243
 
-## Getting Started
+### flutter 3.47.2, dart 3.13.2, Edge, http
 
-This project is a starting point for a Flutter application.
+## ![alt text](img/step_01.png)
 
-A few resources to get you started if this is your first Flutter project:
+# Запуск
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- Скачать папку с проектом
+- Перейти в папку cd
+- Запустить проект flutter run -d Edge
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# что изучили
+
+| Концепция                       | Описание                                                           |
+| :------------------------------ | :----------------------------------------------------------------- |
+| **`Future<T>`**                 | Объект-обещание: вернёт значение типа `T` в будущем                |
+| **`async`**                     | Помечает функцию как асинхронную, разрешает использовать `await`   |
+| **`await`**                     | Приостанавливает функцию до завершения `Future`, не блокируя поток |
+| **`try/catch`**                 | Перехватывает ошибки в асинхронном коде                            |
+| **`http.get()`**                | Отправляет GET-запрос и возвращает `Future<Response>`              |
+| **`jsonDecode()`**              | Парсит JSON-строку в `Map` или `List`                              |
+| **`CircularProgressIndicator`** | Виджет-крутилка, индикатор загрузки                                |
+| **`Image.network()`**           | Загружает и отображает картинку по URL                             |
+| **`ChoiceChip`**                | Виджет для выбора одного варианта из нескольких                    |
+
+# ответы на вопросы
+
+1. Future<T>
+   Обещание вернуть значение типа T в будущем. Отличие: обычное значение доступно сразу, Future — только после завершения асинхронной операции (через await).
+
+2. await
+   Ждёт завершения Future, приостанавливая текущую функцию. Поток не блокирует — UI продолжает работать.
+
+3. setState() дважды
+   1-й — показать загрузку (\_isLoading = true).
+   2-й — скрыть загрузку и показать данные.
+
+4. Без скобок
+   \_fetchPhoto — передача ссылки на функцию (вызовется при нажатии).
+   \_fetchPhoto() — немедленный вызов при построении виджета.
+
+5. Image.network() vs Image.asset()
+   network — грузит из интернета по URL (нужна сеть).
+   asset — грузит из локальных файлов проекта (работает офлайн).
